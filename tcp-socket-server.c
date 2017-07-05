@@ -5,6 +5,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <string.h>
 
 #define BUFFER_SIZE 1024
 #define MAX_NAME_SIZE 50
@@ -86,7 +87,7 @@ void *connection_handler(void *socket_desc) {
     //Receive a message from client
     while((read_size = recv(sock , opcode , sizeof(int) , 0)) > 0)
     {
-        write(sock, opcode, sizeof(int))
+        write(sock, opcode, sizeof(int));
 		//clear the message buffer
 		memset(opcode, 0, sizeof(int));
     }
