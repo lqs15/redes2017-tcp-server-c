@@ -48,8 +48,7 @@ int main (int argc, char *argv[]) {
   printf("Server is listening on %d\n", port);
 
    socklen_t client_len = sizeof(client);
-   while( (client_sock = accept(server_fd, (struct sockaddr *)&client, &client_len) )
-    {
+   while((client_fd = accept(server_fd, (struct sockaddr *)&client, &client_len))) {
         puts("Connection accepted");
          
         if( pthread_create( &thread_id , NULL ,  connection_handler , (void*) &client_sock) < 0)
@@ -63,11 +62,12 @@ int main (int argc, char *argv[]) {
         puts("Handler assigned");
     }
      
-      if (client_sock < 0)
-      {
-          perror("accept failed");
-          return 1;
-      }
+    if (client_sock < 0)
+    {
+        perror("accept failed");
+        return 1;
+    }
+  return 0;
 }
 
 void *connection_handler(void *socket_desc) {
