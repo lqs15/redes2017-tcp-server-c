@@ -9,12 +9,12 @@
 #define MAX_NAME_SIZE 50
 #define on_error(...) { fprintf(stderr, __VA_ARGS__); fflush(stderr); exit(1); }
 
-typedef struct candidato {
-    int código_votacao;
+typedef struct _candidato {
+    int codigo_votacao;
     char nome_candidato[MAX_NAME_SIZE];
     char partido[MAX_NAME_SIZE];
     int num_votos;
-}; 
+} candidato;
 
 int main (int argc, char *argv[]) {
   if (argc < 2) on_error("Usar: %s [port]\n", argv[0]);
@@ -53,9 +53,13 @@ int main (int argc, char *argv[]) {
       int read = recv(client_fd, buf, BUFFER_SIZE, 0);
 
       if (!read) break; // done reading
-      if (read < 0) on_error("Client read failed\n");
-      else printf("%s received", &buf)
-
+      if (read < 0){
+     	 on_error("Client read failed\n");
+      }
+      else {
+	 printf("received %s\n ", buf);
+	 fflush(stdout);
+      }
       err = send(client_fd, buf, read, 0);
       if (err < 0) on_error("Client write failed\n");
     }
