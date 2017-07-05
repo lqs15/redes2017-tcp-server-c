@@ -21,10 +21,6 @@ typedef struct _candidato {
 
 int main (int argc, char *argv[]) {
 
-  candidato candidatos[MAX_CANDIDATES] = {
-
-  }
-
   if (argc < 2) on_error("Usar: %s [port]\n", argv[0]);
 
   int port = atoi(argv[1]);
