@@ -57,8 +57,9 @@ int main (int argc, char *argv[]) {
      	 on_error("Client read failed\n");
       }
       else {
-	 printf("received %s\n ", buf);
-	 fflush(stdout);
+        buf[read] = 0
+        printf("received %s\n ", buf);
+        fflush(stdout);
       }
       err = send(client_fd, buf, read, 0);
       if (err < 0) on_error("Client write failed\n");
