@@ -19,6 +19,8 @@ typedef struct _candidato {
     int num_votos;
 } candidato;
 
+void *connection_handler(void *);
+
 int main (int argc, char *argv[]) {
 
   if (argc < 2) on_error("Usar: %s [port]\n", argv[0]);
