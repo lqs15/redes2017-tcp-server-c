@@ -50,7 +50,7 @@ int main (int argc, char *argv[]) {
    socklen_t client_len = sizeof(client);
    while((client_fd = accept(server_fd, (struct sockaddr *)&client, &client_len))) {
         puts("Connection accepted");
-         
+        pthread_t thread_id; 
         if( pthread_create( &thread_id , NULL ,  connection_handler , (void*) &client_sock) < 0)
         {
             perror("could not create thread");
