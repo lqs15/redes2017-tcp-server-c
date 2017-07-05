@@ -4,9 +4,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <pthread.h>
 
 #define BUFFER_SIZE 1024
 #define MAX_NAME_SIZE 50
+#define MAX_CANDIDATES 50
 #define on_error(...) { fprintf(stderr, __VA_ARGS__); fflush(stderr); exit(1); }
 
 typedef struct _candidato {
@@ -17,6 +19,11 @@ typedef struct _candidato {
 } candidato;
 
 int main (int argc, char *argv[]) {
+
+  candidato candidatos[MAX_CANDIDATES] = {
+
+  }
+
   if (argc < 2) on_error("Usar: %s [port]\n", argv[0]);
 
   int port = atoi(argv[1]);
@@ -43,28 +50,55 @@ int main (int argc, char *argv[]) {
 
   printf("Server is listening on %d\n", port);
 
-  while (1) {
-    socklen_t client_len = sizeof(client);
-    client_fd = accept(server_fd, (struct sockaddr *) &client, &client_len);
-
-    if (client_fd < 0) on_error("Could not establish new connection\n");
-
-    while (1) {
-      int read = recv(client_fd, buf, BUFFER_SIZE, 0);
-
-      if (!read) break; // done reading
-      if (read < 0){
-     	 on_error("Client read failed\n");
-      }
-      else {
-        buf[read] = 0
-        printf("received %s\n ", buf);
-        fflush(stdout);
-      }
-      err = send(client_fd, buf, read, 0);
-      if (err < 0) on_error("Client write failed\n");
+   socklen_t client_len = sizeof(client);
+   while( (client_sock = accept(server_fd, (struct sockaddr *)&client, &client_len) )
+    {
+        puts("Connection accepted");
+         
+        if( pthread_create( &thread_id , NULL ,  connection_handler , (void*) &client_sock) < 0)
+        {
+            perror("could not create thread");
+            return 1;
+        }
+         
+        //Now join the thread , so that we dont terminate before the thread
+        //pthread_join( thread_id , NULL);
+        puts("Handler assigned");
     }
-  }
+     
+      if (client_sock < 0)
+      {
+          perror("accept failed");
+          return 1;
+      }
+}
 
-  return 0;
+void *connection_handler(void *socket_desc) {
+    //Get the socket descriptor
+    int sock = *(int*)socket_desc;
+    int read_size, *opcode;
+    char *message , client_message[2000];
+     
+    //Send some messages to the client
+    message = "Digite o código de operação: 111 para receber lista de candidatos e 999 pra enviar lista de votos:\n";
+    write(sock , message , strlen(message));
+     
+    //Receive a message from client
+    while((read_size = recv(sock , opcode , sizeof(int) , 0)) > 0)
+    {
+        write(sock, opcode, sizeof(int))
+		//clear the message buffer
+		memset(opcode, 0, sizeof(int));
+    }
+     
+    if(read_size == 0)
+    {
+        puts("Client disconnected");
+        fflush(stdout);
+    }
+    else if(read_size == -1)
+    {
+        perror("recv failed");
+    }
+         
 }
