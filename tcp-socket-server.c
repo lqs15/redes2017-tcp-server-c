@@ -76,18 +76,18 @@ void *connection_handler(void *socket_desc) {
     //Get the socket descriptor
     int sock = *(int*)socket_desc;
     int read_size, *opcode;
-    char *message , client_message[2000];
+    char *message , client_message[10];
      
     //Send some messages to the client
     message = "Digite o código de operação: 111 para receber lista de candidatos e 999 pra enviar lista de votos:\n";
     write(sock , message , strlen(message));
      
     //Receive a message from client
-    while((read_size = recv(sock , opcode , sizeof(int) , 0)) > 0)
+    while((read_size = recv(sock , client_message , 10 , 0)) > 0)
     {
-        write(sock, opcode, sizeof(int));
+        write(sock, client_message, strlen(client_message) );
 		//clear the message buffer
-		memset(opcode, 0, sizeof(int));
+		memset(client_message, 0, 10);
     }
      
     if(read_size == 0)
