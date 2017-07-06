@@ -53,7 +53,7 @@ int main (int argc, char *argv[]) {
    while((client_fd = accept(server_fd, (struct sockaddr *)&client, &client_len))) {
         puts("Connection accepted");
         pthread_t thread_id; 
-        if( pthread_create( &thread_id , NULL ,  connection_handler , (void*) &client_sock) < 0)
+        if( pthread_create( &thread_id , NULL ,  connection_handler , (void*) &client_fd) < 0)
         {
             perror("could not create thread");
             return 1;
@@ -64,7 +64,7 @@ int main (int argc, char *argv[]) {
         puts("Handler assigned");
     }
      
-    if (client_sock < 0)
+    if (client_fd < 0)
     {
         perror("accept failed");
         return 1;
