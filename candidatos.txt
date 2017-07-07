@@ -1,0 +1,7 @@
+;1;Bolsonaro;PSC;0
+;2;Lula;PT;0
+;3;Marina Silva;PSB;0
+;4;Aecio Neves;PSDB;0
+;5;Luciana Genro;PSOL;0
+;6;Levy Fidelix;PRTB;0
+;7;Eduardo Jorge;PV;0
